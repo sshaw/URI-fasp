@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use URI;
-use Test::More tests => 15;
+use Test::More tests => 17;
 
 my $uri = URI->new('fasp://example.com');
 isa_ok($uri, 'URI::fasp');
@@ -32,3 +32,9 @@ is($uri->targetrate, 100000);
 my $ssh = $uri->as_ssh;
 isa_ok($ssh, 'URI::ssh');
 is($ssh->port, 33001);
+is($ssh->query, undef);
+
+# Aspera uses "port", we use that and "faspport"
+$uri = URI->new('fasp://example.com:33001?faspport=5000');
+is($uri->faspport, 5000);
+

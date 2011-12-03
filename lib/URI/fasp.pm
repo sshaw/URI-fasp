@@ -10,25 +10,32 @@ use URI::QueryParam;
 
 our $VERSION = '0.01';
 
+{
+ no strict 'refs';
+ for my $attr (qw|bwcap policy httpport targetrate|) {   
+   *$attr = sub { 
+     shift->query_param($attr, @_); 
+   }
+ }
+}
+
 sub _init
 {
     my $class = shift;
     my $self  = $class->SUPER::_init(@_);    
     $self->faspport($self->default_faspport) unless defined $self->faspport;
-    # Other defaults
+    # Other defaults...
     $self;
 }
 
-sub bwcap { shift->_query_param('bwcap', @_); }
-sub policy { shift->_query_param('policy', @_); }
-sub httpport { shift->_query_param('httpport', @_); }
-sub targetrate { shift->_query_param('targetrate', @_); }
 sub default_faspport { 33001 }
 
 sub faspport
 {
     my $self = shift;
-    return $self->_query_param('port', @_) if @_;
+    return $self->query_param('port', @_) if @_;
+    
+    # No need to entertain a list 
     my $port = $self->query_param('port') || 
       	       $self->query_param('faspport');
     $port;
@@ -41,19 +48,6 @@ sub as_ssh
     $ssh->scheme('ssh');
     $ssh->query(undef);
     $ssh;
-}
-
-sub _query_param
-{
-    my ($self, $param, $value) = @_;
-
-    # Do we need to accept multiple args here?
-    if($value) {
-	$self->query_param($param, $value);
-	return;
-    }
-        
-    $self->query_param($param);
 }
 
 1;

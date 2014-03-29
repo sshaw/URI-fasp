@@ -8,7 +8,8 @@ WriteMakefile(
      VERSION_FROM  => 'lib/URI/fasp.pm',
      ABSTRACT_FROM => 'lib/URI/fasp.pm',
     (eval { ExtUtils::MakeMaker->VERSION(6.46) } ?
-       (META_MERGE  => { resources => { bugtracker => 'http://github.com/sshaw/URI-fasp/issues' } }) : ())     
+       (META_MERGE  => { resources => { bugtracker => 'http://github.com/sshaw/URI-fasp/issues',
+                                        repository => 'http://github.com/sshaw/URI-fasp'} }) : ())
 );
 
 
